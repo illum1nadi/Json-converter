@@ -61,5 +61,21 @@ The following files are involved in the transformation process:
 
 ---
 
-> **Note**: Checked it on the website by changing the hierarchical file and posting it to the website by updating the version number.
+## Typography Mappings
+
+### **Text Variant**
+- **Figma**:  
+  Text style: `"Label / Medium"` or `"Description / Regular"`  
+- **Component**:  
+  `typography.variant`: `"label-md"` or `"description"`
+
+### **Font Weight**
+- **Figma**:  
+  `fontWeight`: `500` for medium, `400` for regular  
+- **Component**:  
+  `typography.fontWeight`: `"medium"` or `"regular"`
+
+---
+
+> **Note**: Checked it on the website by changing the hierarchical file and posting it to the website by updating the version number.  
 ![Testing the generated code after transformation.](test.png)
