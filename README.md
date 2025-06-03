@@ -2,6 +2,14 @@
 
 This document outlines the key mappings between the Figma design specification (`figma-toggle.json`) and the no-code component configuration (`transformed-toggle.json`).
 
+The following files are involved in the transformation process:
+
+- **`figma.json`**: The full exported JSON from the Figma file, containing all design elements.
+- **`figma-json-filter.js`**: JavaScript code used to filter out specific toggle components from the full Figma JSON and save them as individual files.
+- **`figma-toggle.json`**: A filtered, standalone JSON file representing a single toggle component extracted using the filter.
+- **`transform_json.js`**: JavaScript code that transforms the extracted Figma JSON (`figma-toggle.json`) into a no-code compatible configuration.
+- **`transformed-toggle.json`**: The final output JSON representing the toggle component in the no-code system format.
+
 ---
 
 ## Component Property Mappings
