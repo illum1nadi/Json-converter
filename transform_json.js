@@ -64,7 +64,7 @@ class ToggleTransformer {
 }
 
 //Read the input file
-const inputJson = JSON.parse(fs.readFileSync('toggle-2.json', 'utf-8'));
+const inputJson = JSON.parse(fs.readFileSync('figma-toggle.json', 'utf-8'));
 
 //Transform the component
 const transformer = new ToggleTransformer();

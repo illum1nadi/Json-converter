@@ -1,6 +1,6 @@
 # Mapping: Figma Design → No-Code Component Configuration
 
-This document outlines the key mappings between the Figma design specification (`toggle-2.json`) and the no-code component configuration (`toggle_components.json`).
+This document outlines the key mappings between the Figma design specification (`figma-toggle.json`) and the no-code component configuration (`transformed-toggle.json`).
 
 ---
 
