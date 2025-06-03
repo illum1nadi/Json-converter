@@ -62,3 +62,4 @@ The following files are involved in the transformation process:
 ---
 
 > **Note**: Checked it on the website by changing the hierarchical file and posting it to the website by updating the version number.
+![Testing the generated code after transformation.](test.png)
