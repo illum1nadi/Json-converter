@@ -1,0 +1,21 @@
+{
+  "component": {
+    "componentType": "Toggle",
+    "appearance": {
+      "size": "sm",
+      "color": "brand"
+    },
+    "content": {
+      "label": "Remember me",
+      "description": "Save my login details for next time."
+    }
+  },
+  "visibility": {
+    "value": true
+  },
+  "dpOn": [],
+  "displayName": "Toggle",
+  "dataSourceIds": [],
+  "id": "b_xogAM",
+  "parentId": "root_id"
+}
