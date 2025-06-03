@@ -1,16 +1,48 @@
 const fs = require('fs');
 
+//for deciding the typography of the toggle component based on the Figma JSON input. No color option in figma as of now.
 class ToggleTransformer {
+  // Typography mappings based on your specifications
+  typographyMappings = {
+    // Text variants
+    '10': { variant: 'text-xxxs' },
+    '11': { variant: 'text-xxs' },
+    '12': { variant: 'text-xs' },
+    '14': { variant: 'text-sm' },
+    '16': { variant: 'text-md' },
+    '18': { variant: 'text-lg' },
+    '20': { variant: 'text-xl' },
+    
+    // Display variants
+    '24': { variant: 'display-xs' },
+    '30': { variant: 'display-sm' },
+    '44': { variant: 'display-md' },
+    '48': { variant: 'display-lg' },
+    '60': { variant: 'display-xl' },
+    '72': { variant: 'display-2xl' },
+
+    // Font weights
+    '300': { weight: 'light' },
+    '400': { weight: 'regular' },
+    '500': { weight: 'medium' },
+    '600': { weight: 'semi-bold' },
+    '700': { weight: 'bold' }
+  };
+
+  colorMappings = {
+    'brand': { color: 'text-brand-medium' },
+    'warning': { color: 'text-warning-secondary' },
+    'secondary': { color: 'text-secondary' }
+  };
+
   transform(figmaJson) {
-    //Extracting all the necessary properties from the curled Figma JSON.
     const componentProps = figmaJson.componentProperties || {};
     const children = figmaJson.children || [];
     const textContent = this.extractTextContent(children);
+    const textStyles = this.extractTextStyles(children);
     
-    //Generate a random unique ID, which is a field, have to replace it with logic used on our website.
     const id = `b_${this.generateRandomId()}`;
     
-    //Build the component structure to match no code json format.
     return {
       component: {
         componentType: "Toggle",
@@ -20,7 +52,19 @@ class ToggleTransformer {
         },
         content: {
           label: textContent.mainText || "New Toggle",
-          description: textContent.supportingText || ""
+          description: textContent.supportingText || "",
+          addOns: {
+            label: {
+              variant: textStyles.label?.variant || 'text-md',
+              weight: textStyles.label?.weight || 'medium', // Default to medium (500) as per your Figma style
+              color: textStyles.label?.color || 'text-brand-medium'
+            },
+            description: {
+              variant: textStyles.description?.variant || 'text-sm',
+              weight: textStyles.description?.weight || 'regular',
+              color: textStyles.description?.color || 'text-secondary'
+            }
+          }
         }
       },
       visibility: {
@@ -34,7 +78,6 @@ class ToggleTransformer {
     };
   }
 
-  //Setting the text add ons on our website, using the text and supporting text from Figma JSON.
   extractTextContent(children) {
     const result = { mainText: "", supportingText: "" };
     
@@ -52,7 +95,64 @@ class ToggleTransformer {
     
     return result;
   }
-  //Id generation logic, not necessary.
+
+  extractTextStyles(children) {
+    const result = { label: {}, description: {} };
+    
+    for (const child of children) {
+      if (child.name === "Text and supporting text" && child.children) {
+        for (const textChild of child.children) {
+          if (textChild.style) {
+            const style = textChild.style;
+            const fontSize = Math.round(style.fontSize).toString();
+            const fontWeight = style.fontWeight || 500; // Default to medium (500)
+            
+            const variantMatch = this.typographyMappings[fontSize]?.variant;
+            const weightMatch = this.typographyMappings[fontWeight.toString()]?.weight;
+            
+            if (textChild.name === "Text") {
+              result.label = {
+                variant: variantMatch || 'text-md', // Default to medium if no match
+                weight: weightMatch || 'medium',   // Default to medium if no match
+                color: this.determineColor(style.fills)
+              };
+            } else if (textChild.name === "Supporting text") {
+              result.description = {
+                variant: variantMatch || 'text-sm', // Default to small if no match
+                weight: weightMatch || 'regular',   // Default to regular if no match
+                color: this.determineColor(style.fills)
+              };
+            }
+          }
+        }
+      }
+    }
+    
+    return result;
+  }
+
+  determineColor(fills) {
+    if (!fills || !fills.length) return 'text-brand-medium';
+    
+    // Extract the hex color from Figma fills
+    const fill = fills[0];
+    if (fill.color) {
+      const hex = this.rgbToHex(fill.color.r, fill.color.g, fill.color.b);
+      
+      // Check if this matches any of our known colors
+      if (hex === '#4E1D09') return 'text-warning-secondary';
+      // Add more color checks as needed
+    }
+    
+    return 'text-brand-medium';
+  }
+
+  rgbToHex(r, g, b) {
+    return '#' + [r, g, b]
+      .map(x => Math.round(x * 255).toString(16).padStart(2, '0')
+      .join('').toUpperCase());
+  }
+
   generateRandomId() {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
     let result = '';
@@ -63,14 +163,14 @@ class ToggleTransformer {
   }
 }
 
-//Read the input file
+// Read the input file
 const inputJson = JSON.parse(fs.readFileSync('figma-toggle.json', 'utf-8'));
 
-//Transform the component
+// Transform the component
 const transformer = new ToggleTransformer();
 const outputJson = transformer.transform(inputJson);
 
-//Write the output to a new file
+// Write the output to a new file
 fs.writeFileSync('transformed-toggle.json', JSON.stringify(outputJson, null, 2));
 
 console.log('Transformation complete. Output written to transformed-toggle.json');

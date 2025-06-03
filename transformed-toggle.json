@@ -7,7 +7,19 @@
     },
     "content": {
       "label": "Remember me",
-      "description": "Save my login details for next time."
+      "description": "Save my login details for next time.",
+      "addOns": {
+        "label": {
+          "variant": "text-sm",
+          "weight": "medium",
+          "color": "text-brand-medium"
+        },
+        "description": {
+          "variant": "text-xs",
+          "weight": "regular",
+          "color": "text-brand-medium"
+        }
+      }
     }
   },
   "visibility": {
@@ -16,6 +28,6 @@
   "dpOn": [],
   "displayName": "Toggle",
   "dataSourceIds": [],
-  "id": "b_xogAM",
+  "id": "b_CDpOW",
   "parentId": "root_id"
 }
